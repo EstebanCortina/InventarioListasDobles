@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="inventario.js"></script>
+  <script src="productos.js"></script>
+  <script src="funciones.js"></script>
+  <title>Document</title>
+</head>
+<form id="frmFirst">
+  <div>
+    <label for="nombre">
+      Nombre:<input type="text" id="txtNombre">
+      <button type="button" id="btnSend">AGREGAR</button>
+    </label>
+  </div>
+  <div>
+    <label for="codigo">
+      Codigo:<input type="text" id="txtCodigo">
+    </label>
+  </div>
+  <div>
+    <div>
+      <label for="nombre">
+        Precio:<input type="text" id="txtPrecio">
+      </label>
+    </div>
+    <div>
+      <label for="nombre">
+        Cantidad:<input type="text" id="txtCantidad">
+      </label>
+    </div>
+    <label for="mostrar">
+      <button type="button" id="btnShow">MOSTRAR</button>
+    </label>
+  </div>
+  <div>
+    <label for="inverso">
+      <button type="button" id="btnInverso">INVERSO</button>
+    </label>
+  </div>
+  <button type="button" id="btnSearch">BUSCAR</button>
+  <div>
+    <button type="button" id="btnDelete">ELIMINAR</button>
+  </div>
+
+  <div>
+    Insertar en posicion: <input type="text" id="txtPos">
+    <button type="button" id="btnInsert">INSERTAR</button>
+  </div>
+
+  <div id="show">
+  </div>
+</form>
+
+<body>
+  <script>
+    //Inicializar los elementos:
+    const inventario = new Inventario();
+    const divShow = document.getElementById('show');
+    const btnSend = document.getElementById('btnSend');
+    const btnShow = document.getElementById('btnShow');
+    const btnInverso = document.getElementById('btnInverso');
+    const btnSearch = document.getElementById('btnSearch');
+    const btnDelete = document.getElementById('btnDelete');
+    /*
+    const btnInsert = document.getElementById('btnInsert');
+    */
+
+
+    btnSend.addEventListener('click', () => {
+      let txtNombre = document.getElementById('txtNombre').value;
+      let txtCodigo = parseInt(document.getElementById('txtCodigo').value);
+      let txtPrecio = document.getElementById('txtPrecio').value;
+      let txtCantidad = document.getElementById('txtCantidad').value;
+      //Creacion de un nuevo producto:
+      const producto = new Producto(txtCodigo, txtNombre, txtPrecio, txtCantidad,);
+      inventario.addProduct(producto);
+
+      //Reiniciar valores del form:
+      document.getElementById('txtNombre').value = '';
+      document.getElementById('txtCodigo').value = '';
+      document.getElementById('txtPrecio').value = '';
+      document.getElementById('txtCantidad').value = '';
+    });
+
+
+    btnInsert.addEventListener('click', () => {
+      let txtNombre = document.getElementById('txtNombre').value;
+      let txtCodigo = document.getElementById('txtCodigo').value;
+      let txtPos = parseInt(document.getElementById('txtPos').value);
+      //Borrar lo anterior para mostrar una lista nueva cada vez:
+      divShow.innerHTML = '';
+      /*
+      let query = inventario.insertar(txtPos, txtCodigo);
+      if (query == null) {
+        divShow.innerHTML += 'Agregue un codigo';
+      } else {
+        divShow.innerHTML = inventario.listado();
+      }
+      */
+      let productoInsert = inventario.buscar(txtCodigo);
+      inventario.insertar(txtPos, productoInsert);
+      divShow.innerHTML = inventario.listado();
+    });
+
+
+    btnDelete.addEventListener('click', () => {
+      let txtCodigo = document.getElementById('txtCodigo').value;
+      //console.log(inventario.eliminar(txtCodigo));
+      console.log(inventario.lista);
+      document.getElementById('txtCodigo').value = "";
+
+      //Resultado de la busqueda:
+      let query = inventario.eliminar(txtCodigo)
+      //Validacion del contenido de lZa query
+      if (query === null) {
+        divShow.innerHTML += '<br>El producto no existe';
+      } else {
+        divShow.innerHTML = '';
+        if (inventario.primero == null) {
+          divShow.innerHTML = 'El inventario se quedo vacio';
+        } else {
+          divShow.innerHTML = '';
+          divShow.innerHTML += inventario.listado();
+          divShow.innerHTML += query;
+        }
+
+
+
+      }
+    });
+
+    btnSearch.addEventListener('click', () => {
+      let txtCodigo = parseInt(document.getElementById('txtCodigo').value);
+      console.log(inventario.buscar(txtCodigo));
+      document.getElementById('txtCodigo').value = "";
+
+      //Resultado de la busqueda:
+      let query = inventario.buscar(txtCodigo);
+      //Validacion del contenido de la query
+      if (query === null) {
+        divShow.innerHTML += '<br>El producto no existe';
+
+      } else {
+        divShow.innerHTML = '';
+        divShow.innerHTML += '<br> Resultado de busqueda: ' + JSON.stringify(query) + '<br>';
+      }
+    });
+
+    btnShow.addEventListener('click', () => {
+      //Borrar lo anterior para mostrar una lista nueva cada vez:
+      divShow.innerHTML = '';
+      //Los objetos son retornados uno por uno.
+      let query = inventario.listado();
+      if (query == null) {
+        divShow.innerHTML = 'El inventario esta vacio';
+      } else {
+        divShow.innerHTML = query;
+      }
+
+    });
+
+    btnInverso.addEventListener('click', () => {
+      divShow.innerHTML = '';
+      //Se hace la inversion del arreglo principal y se retorna ya invertido:
+      let query = inventario.listarInverso();
+      if (query == null) {
+        divShow.innerHTML = 'El inventario esta vacio';
+      } else {
+        divShow.innerHTML = query;
+      }
+    });
+  </script>
+</body>
+
+</html>
