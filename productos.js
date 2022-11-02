@@ -5,5 +5,6 @@ class Producto {
     this.Precio = precio;
     this.Cantidad = cantidad;
     this.next = null;
+    this.last = null;
   }
 }

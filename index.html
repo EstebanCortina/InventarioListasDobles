@@ -46,11 +46,13 @@
   <div>
     <button type="button" id="btnDelete">ELIMINAR</button>
   </div>
-
+  <!--
   <div>
     Insertar en posicion: <input type="text" id="txtPos">
     <button type="button" id="btnInsert">INSERTAR</button>
   </div>
+-->
+
 
   <div id="show">
   </div>
@@ -136,7 +138,7 @@
 
     btnSearch.addEventListener('click', () => {
       let txtCodigo = parseInt(document.getElementById('txtCodigo').value);
-      console.log(inventario.buscar(txtCodigo));
+      // console.log(inventario.buscar(txtCodigo));
       document.getElementById('txtCodigo').value = "";
 
       //Resultado de la busqueda:
